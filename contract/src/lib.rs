@@ -9,14 +9,20 @@ use near_sdk::{log, near_bindgen};
 #[near_bindgen]
 #[derive(Default, BorshDeserialize, BorshSerialize)]
 pub struct Counter {
-    val: i8,
+    val: i32,
 }
 
 #[near_bindgen]
 impl Counter {
     /// Public method: Returns the counter value.
-    pub fn get_num(&self) -> i8 {
+    pub fn get_num(&self) -> i32 {
         return self.val;
+    }
+
+    /// Public method: Set value to counter.
+    pub fn set_num(mut self, num: i32) {
+        self.val = num;
+        log!("Counter is set {}", num);
     }
 
     /// Public method: Increment the counter.
@@ -55,6 +61,13 @@ mod tests {
         let mut contract = Counter { val: 0 };
         contract.increment();
         assert_eq!(1, contract.get_num());
+    }
+
+    #[test]
+    fn set_num() {
+        let mut contract = Counter { val: 0 };
+        contract.set(30);
+        assert_eq!(30, contract.get_num());
     }
 
     #[test]
